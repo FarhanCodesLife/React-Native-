@@ -21,7 +21,8 @@ export default class index extends Component {
   flex: 1,
   justifyContent:'center',
   flexDirection:'row',
-  gap:10,
+  gap:20,
+  margin:30,
 
 }}>
 
