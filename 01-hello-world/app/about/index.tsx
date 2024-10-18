@@ -19,21 +19,21 @@ export class About extends Component {
 
 
 
-        <Link href={''} style={{
+        <Link href={'/'} style={{
           color:'#820cf0',
           fontSize: 30,
         }}>
           Home
           </Link>
           
-          <Link href={'about'} style={{
+          <Link href={'/about'} style={{
           color:'#820cf0',
           fontSize: 30,
         }}>
           About
           </Link>
 
-          <Link href={'servises'} style={{
+          <Link href={'/servises'} style={{
           color:'#820cf0',
           fontSize: 30,
         }}>

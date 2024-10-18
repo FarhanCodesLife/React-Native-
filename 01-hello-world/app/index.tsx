@@ -34,14 +34,14 @@ export default class index extends Component {
           Home
           </Link>
           
-          <Link href={'about'} style={{
+          <Link href={'/about'} style={{
             color:'#820cf0',
             fontSize: 30,
           }}>
           About
           </Link>
 
-          <Link href={'servises'} style={{
+          <Link href={'/servises'} style={{
           color:'#820cf0',
           fontSize: 30,
         }}>
