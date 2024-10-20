@@ -41,7 +41,16 @@ setModalVisible(false)
   return (
       <SafeAreaView>
     <View>
-      <Text>index</Text>
+      <Text 
+      style={{
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: 'blue',
+        textAlign: 'center',
+        marginVertical: 20
+      
+      }}
+      >Todo</Text>
 
       
       <TextInput
@@ -100,12 +109,8 @@ setModalVisible(false)
       />
       <View style={{
         flexDirection: 'row',
-        // flexWrap:'nowrap',
-        // flexDirection: 'row',
         justifyContent: 'space-evenly',
-        alignItems: 'center',
-        // marginVertical: 10,
-        
+        alignItems: 'center', 
       }}>
 
        <TouchableOpacity style={styles.buttonClose} onPress={()=>setModalVisible(!modalVisible)}>
