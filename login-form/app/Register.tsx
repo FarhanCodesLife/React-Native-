@@ -4,7 +4,7 @@ import React from 'react'
 const Register = () => {
   return (
     <View>
-      <Text>Register now</Text>
+      <Text>now</Text>
     </View>
   )
 }
