@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 export default function Index() {
   return (
     <View>
-      <Text>Login Screen</Text>
+      <Text>Login </Text>
     </View>
   );
 }
