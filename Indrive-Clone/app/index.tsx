@@ -7,20 +7,20 @@ export default function Index() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     console.log("Login attempted with:", email, password);
+    
+    
+    createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      console.log(user)
+    })
+    .catch((error) => {
+      const errorMessage = error.message;
+      console.log(errorMessage)
+    });
   };
-
-
-createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user)
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        console.log(errorMessage)
-      });
 
 
   return (
