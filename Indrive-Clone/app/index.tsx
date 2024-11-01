@@ -2,11 +2,13 @@ import { Text, View, TextInput, TouchableOpacity, StyleSheet } from "react-nativ
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./config/firebase/config";
+import { setUser } from "./config/redux/reducer/userslice";
+import { useDispatch } from "react-redux";
 
 export default function Index() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const dispatch = useDispatch()
   const handleLogin = async () => {
     console.log("Login attempted with:", email, password);
     
@@ -15,7 +17,9 @@ export default function Index() {
     .then((userCredential) => {
       const user = userCredential.user;
       console.log(user)
-    })
+
+      dispatch(setUser(user))
+    })  
     .catch((error) => {
       const errorMessage = error.message;
       console.log(errorMessage)
