@@ -20,52 +20,74 @@ const login = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}  >login</Text>
-      <TextInput placeholder='Email' onChangeText={(text) => setEmail(text)} style={styles.input} />
-      <TextInput placeholder='Password' onChangeText={(text) => setPassword(text)} style={styles.input} />
-        <TouchableOpacity onPress={handleLogin} style={styles.button}   >
-          <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
+      <Text style={styles.title}>Welcome Back!</Text>
+      <View style={styles.formContainer}>
+        <TextInput 
+          placeholder='Email' 
+          onChangeText={(text) => setEmail(text)} 
+          style={styles.input}
+          placeholderTextColor="#666" 
+        />
+        <TextInput 
+          placeholder='Password' 
+          onChangeText={(text) => setPassword(text)} 
+          style={styles.input}
+          secureTextEntry
+          placeholderTextColor="#666" 
+        />
+        <TouchableOpacity onPress={handleLogin} style={styles.button}>
+          <Text style={styles.buttonText}>Sign In</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: '#ffffff',
     padding: 20,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
+    fontSize: 28,
+    fontWeight: "700",
+    color: '#333',
+    marginTop: 100,
+    marginBottom: 40,
+    textAlign: 'center',
+  },
+  formContainer: {
+    width: '100%',
+    paddingHorizontal: 20,
   },
   input: {
     width: "100%",
-    height: 40,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    marginBottom: 10,
-    paddingHorizontal: 10,
+    height: 55,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 12,
+    marginBottom: 16,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    color: '#333',
   },
   button: {
-    backgroundColor: "#007AFF",
+    backgroundColor: "#00B555",
     width: "100%",
-    padding: 15,
-    borderRadius: 5,
+    height: 55,
+    borderRadius: 12,
     alignItems: "center",
+    justifyContent: "center",
+    marginTop: 10,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   buttonText: {
     color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  errorText: {
-    color: 'red',
-    marginBottom: 10,
-    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: "600",
   },
 });
 export default login

@@ -1,101 +1,108 @@
-import { Text, View, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
-import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./config/firebase/config";
-import { setUser } from "./config/redux/reducer/userslice";
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from './types/navigation';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { auth } from './config/firebase/config'
+import { setUser } from './config/redux/reducer/userslice'
 
-export default function Index() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const dispatch = useDispatch();
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const user = useSelector((state: any) => state.user.user)
-  console.log(user)
-  const handleSignUp = async () => {
-    try {
-      setError("");
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      dispatch(setUser(userCredential.user));
-      console.log(userCredential.user)
-      alert("Sign Up Success")
-      navigation.navigate("login")
-    } catch (error: any) {
-      setError(error.message);
+const SignUp = () => {
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
+    const dispatch = useDispatch()
+
+    const handleSignUp = async () => {
+        if (password !== confirmPassword) {
+            alert("Passwords don't match!")
+            return
+        }
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+            dispatch(setUser(userCredential.user))
+        } catch (error: any) {
+            alert(error.message)
+        }
     }
-    
-  };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
-      
-      {error && <Text style={styles.errorText}>{error}</Text>}
-      
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      
-      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-        <Text style={styles.buttonText}>Sign Up</Text>
-      </TouchableOpacity>
-    </View>
-  );
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>Create Account</Text>
+            <View style={styles.formContainer}>
+                <TextInput 
+                    placeholder='Email' 
+                    onChangeText={(text) => setEmail(text)} 
+                    style={styles.input}
+                    placeholderTextColor="#666" 
+                />
+                <TextInput 
+                    placeholder='Password' 
+                    onChangeText={(text) => setPassword(text)} 
+                    style={styles.input}
+                    secureTextEntry
+                    placeholderTextColor="#666" 
+                />
+                <TextInput 
+                    placeholder='Confirm Password' 
+                    onChangeText={(text) => setConfirmPassword(text)} 
+                    style={styles.input}
+                    secureTextEntry
+                    placeholderTextColor="#666" 
+                />
+                <TouchableOpacity onPress={handleSignUp} style={styles.button}>
+                    <Text style={styles.buttonText}>Sign Up</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  input: {
-    width: "100%",
-    height: 40,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-  },
-  button: {
-    backgroundColor: "#007AFF",
-    width: "100%",
-    padding: 15,
-    borderRadius: 5,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  errorText: {
-    color: 'red',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#ffffff',
+        padding: 20,
+    },
+    title: {
+        fontSize: 28,
+        fontWeight: "700",
+        color: '#333',
+        marginTop: 100,
+        marginBottom: 40,
+        textAlign: 'center',
+    },
+    formContainer: {
+        width: '100%',
+        paddingHorizontal: 20,
+    },
+    input: {
+        width: "100%",
+        height: 55,
+        backgroundColor: '#f5f5f5',
+        borderRadius: 12,
+        marginBottom: 16,
+        paddingHorizontal: 16,
+        fontSize: 16,
+        color: '#333',
+    },
+    button: {
+        backgroundColor: "#00B555",
+        width: "100%",
+        height: 55,
+        borderRadius: 12,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 10,
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+    },
+    buttonText: {
+        color: "white",
+        fontSize: 18,
+        fontWeight: "600",
+    },
 });
+
+export default SignUp 
