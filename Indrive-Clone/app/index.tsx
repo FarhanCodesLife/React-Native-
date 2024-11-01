@@ -1,15 +1,36 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth } from './config/firebase/config'
 import { setUser } from './config/redux/reducer/userslice'
+import { useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { onAuthStateChanged } from 'firebase/auth'
+
+type RootStackParamList = {
+  Home: undefined;
+  // ... other screens
+};
 
 const SignUp = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const dispatch = useDispatch()
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in, navigate to home
+                navigation.navigate('Home')
+            }
+        })
+
+        // Cleanup subscription on unmount
+        return () => unsubscribe()
+    }, [])
 
     const handleSignUp = async () => {
         if (password !== confirmPassword) {
