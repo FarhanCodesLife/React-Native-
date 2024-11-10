@@ -8,29 +8,32 @@ import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { onAuthStateChanged } from 'firebase/auth'
 
-type RootStackParamList = {
+// Update the RootStackParamList type to be more explicit
+export type RootStackParamList = {
   Home: undefined;
-  // ... other screens
+  Login: undefined;
+  Signup: undefined;
 };
+
+// Add type for navigation prop
+type SignUpScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const SignUp = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const dispatch = useDispatch()
-    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+    const navigation = useNavigation<SignUpScreenNavigationProp>();
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                // User is signed in, navigate to home
-                navigation.navigate('Home')
+                return navigation.replace("Home")
             }
         })
 
-        // Cleanup subscription on unmount
         return () => unsubscribe()
-    }, [])
+    }, [navigation])
 
     const handleSignUp = async () => {
         if (password !== confirmPassword) {
@@ -40,6 +43,9 @@ const SignUp = () => {
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password)
             dispatch(setUser(userCredential.user))
+            alert("Account created successfully")
+            
+            navigation.replace("Login")
         } catch (error: any) {
             alert(error.message)
         }
@@ -71,6 +77,15 @@ const SignUp = () => {
                 />
                 <TouchableOpacity onPress={handleSignUp} style={styles.button}>
                     <Text style={styles.buttonText}>Sign Up</Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity 
+                    onPress={() => navigation.navigate('Login')} 
+                    style={styles.loginLink}
+                >
+                    <Text style={styles.loginLinkText}>
+                        Already have an account? Login
+                    </Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -123,6 +138,15 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 18,
         fontWeight: "600",
+    },
+    loginLink: {
+        marginTop: 20,
+        alignItems: 'center',
+    },
+    loginLinkText: {
+        color: '#00B555',
+        fontSize: 16,
+        fontWeight: '500',
     },
 });
 

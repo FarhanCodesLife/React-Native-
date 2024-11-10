@@ -1,93 +1,103 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from './config/firebase/config'
-import { setUser } from './config/redux/reducer/userslice'
+import { useState } from 'react';
+import { View, TextInput, Button, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { router } from 'expo-router';
+import { useDispatch } from 'react-redux';
+import { setAuthenticated, setUser } from './config/redux/slices/authSlice';
+import { AppDispatch } from './config/redux/store/Store';
+import { User } from './config/redux/types/types';
 
-const login = () => {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const dispatch = useDispatch()
-    const handleLogin = async () => {
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password)
-            dispatch(setUser(userCredential.user))
-        } catch (error: any) {
-            alert(error.message)
-        }
+interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export default function Login() {
+  const dispatch = useDispatch<AppDispatch>();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const validateInput = ({ email, password }: LoginCredentials): boolean => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please fill in all fields');
+      return false;
     }
+    if (!email.includes('@')) {
+      Alert.alert('Error', 'Please enter a valid email');
+      return false;
+    }
+    return true;
+  };
+
+  const handleLogin = async () => {
+    try {
+      if (!validateInput({ email, password })) return;
+
+      setLoading(true);
+      
+      // Your login API call here
+      // const response = await loginUser({ email, password });
+      
+      // For demo, simulating API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const mockUser: User = { 
+        id: 1, 
+        email 
+      };
+      
+      dispatch(setUser(mockUser));
+      dispatch(setAuthenticated(true));
+      
+      router.replace("/(tabs)");
+    } catch (error) {
+      Alert.alert('Error', 'Login failed. Please try again.');
+      console.error('Login error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome Back!</Text>
-      <View style={styles.formContainer}>
-        <TextInput 
-          placeholder='Email' 
-          onChangeText={(text) => setEmail(text)} 
-          style={styles.input}
-          placeholderTextColor="#666" 
-        />
-        <TextInput 
-          placeholder='Password' 
-          onChangeText={(text) => setPassword(text)} 
-          style={styles.input}
-          secureTextEntry
-          placeholderTextColor="#666" 
-        />
-        <TouchableOpacity onPress={handleLogin} style={styles.button}>
-          <Text style={styles.buttonText}>Sign In</Text>
-        </TouchableOpacity>
-      </View>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+        keyboardType="email-address"
+        editable={!loading}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        editable={!loading}
+      />
+      {loading ? (
+        <ActivityIndicator size="large" color="#007AFF" />
+      ) : (
+        <Button title="Login" onPress={handleLogin} />
+      )}
     </View>
-  )
+  );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    justifyContent: 'center',
     padding: 20,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: '#333',
-    marginTop: 100,
-    marginBottom: 40,
-    textAlign: 'center',
-  },
-  formContainer: {
-    width: '100%',
-    paddingHorizontal: 20,
-  },
   input: {
-    width: "100%",
-    height: 55,
-    backgroundColor: '#f5f5f5',
-    borderRadius: 12,
-    marginBottom: 16,
-    paddingHorizontal: 16,
-    fontSize: 16,
-    color: '#333',
-  },
-  button: {
-    backgroundColor: "#00B555",
-    width: "100%",
-    height: 55,
-    borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 10,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "600",
+    height: 40,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    marginBottom: 12,
+    padding: 10,
+    borderRadius: 4,
   },
 });
-export default login
