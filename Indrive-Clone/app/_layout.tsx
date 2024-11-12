@@ -1,54 +1,33 @@
-import { Stack } from "expo-router";
-import { Provider } from "react-redux";
-import { store } from "./config/redux/store/Store";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
-import { RootState } from "./config/redux/store/Store";
+import '../global.css';
+import React from 'react';
+import { Stack } from 'expo-router'; 
+import { Provider as AuthProvider } from '../hooks/useAuth';
+import { GestureHandlerRootView } from 'react-native-gesture-handler'; 
+import { Drawer } from 'expo-router/drawer';
+import { HeaderButton } from '../components/HeaderButton';
 
-function RootLayoutNav() {
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
 
-  // Add error boundary
-  useEffect(() => {
-    const handleError = (error: Error) => {
-      console.error('Navigation Error:', error);
-    };
-
-    window.addEventListener('error', handleError);
-    return () => window.removeEventListener('error', handleError);
-  }, []);
-
-  return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen 
-        name="index" 
-      />
-      <Stack.Screen 
-        name="login" 
-        options={{ 
-          redirect: isAuthenticated ? "(tabs)" : undefined,
-        }} 
-      />
-      <Stack.Screen 
-        name="signup" 
-        options={{ 
-          redirect: isAuthenticated ? "(tabs)" : undefined,
-        }} 
-      />
-      <Stack.Screen 
-        name="(tabs)" 
-        options={{ 
-          redirect: !isAuthenticated ? "login" : undefined,
-        }} 
-      />
-    </Stack>
-  );
-}
+export const unstable_settings = {
+  initialRouteName: '(auth)/loading', 
+};
 
 export default function RootLayout() {
   return (
-    <Provider store={store}>
-      <RootLayoutNav />
-    </Provider>
+    <AuthProvider> 
+      <GestureHandlerRootView style={{ flex: 1 }}> 
+        <Stack>
+          <Stack.Screen name="(auth)/loading" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)/index" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)/sign_in" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)/sign_up" options={{ headerShown: false }} />
+          <Stack.Screen name="(drawer)" options={{ headerShown: false }} /> 
+          <Stack.Screen name="(driver)" options={{ headerShown: false }} />
+          <Stack.Screen name="(driver)/driverregister.jsx" options={{ headerShown: false }} />         
+        </Stack>
+      </GestureHandlerRootView>
+    </AuthProvider>
   );
 }
+
+
+

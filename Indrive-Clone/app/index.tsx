@@ -80,7 +80,7 @@ const SignUp = () => {
                 </TouchableOpacity>
                 
                 <TouchableOpacity 
-                    onPress={() => navigation.navigate('Login')} 
+                    onPress={() => navigation.navigate('index')} 
                     style={styles.loginLink}
                 >
                     <Text style={styles.loginLinkText}>
