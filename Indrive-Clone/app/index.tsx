@@ -14,8 +14,6 @@ export type RootStackParamList = {
   Login: undefined;
   Signup: undefined;
 };
-
-// Add type for navigation prop
 type SignUpScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const SignUp = () => {
